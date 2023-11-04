@@ -15,5 +15,5 @@ export async function fetchImages(query, page) {
   });
 
   const { data } = await axios(`?${options}`);
-  return data.hits;
+  return data;
 }

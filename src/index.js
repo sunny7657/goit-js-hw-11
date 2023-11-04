@@ -25,12 +25,14 @@ async function handlerSubmit(evt) {
   const searchTerm = form.elements.searchQuery.value;
   page = 1;
   try {
-    const images = await fetchImages(searchTerm, page);
+    const data = await fetchImages(searchTerm, page);
+    const images = data.hits;
 
     if (images.length === 0) {
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+      form.elements.searchQuery.value = '';
       return;
     }
 
@@ -47,10 +49,16 @@ async function handlerLoadMore(evt) {
   page += 1;
   const searchTerm = form.elements.searchQuery.value;
   try {
-    const images = await fetchImages(searchTerm, page);
+    const data = await fetchImages(searchTerm, page);
+    const images = data.hits;
+    const lastPage = data.totalHits;
+    const hits = data.hits.length;
+    const pages = lastPage / hits;
+
     createMarkup(images);
     galleryLightBox.refresh();
-    if (page === 13) {
+
+    if (page > pages) {
       btnLoadMore.classList.add('hidden');
       Notify.warning(
         "We're sorry, but you've reached the end of search results."
