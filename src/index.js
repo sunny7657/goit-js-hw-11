@@ -51,14 +51,13 @@ async function handlerLoadMore(evt) {
   try {
     const data = await fetchImages(searchTerm, page);
     const images = data.hits;
-    const lastPage = data.totalHits;
     const hits = data.hits.length;
-    const pages = lastPage / hits;
+    const lastPage = Math.ceil(data.totalHits / hits);
 
     createMarkup(images);
     galleryLightBox.refresh();
 
-    if (page > pages) {
+    if (page === lastPage) {
       btnLoadMore.classList.add('hidden');
       Notify.warning(
         "We're sorry, but you've reached the end of search results."
