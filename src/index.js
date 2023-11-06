@@ -21,6 +21,7 @@ btnLoadMore.classList.add('hidden');
 async function handlerSubmit(evt) {
   evt.preventDefault();
   div.innerHTML = '';
+  btnLoadMore.classList.add('hidden');
 
   const searchTerm = form.elements.searchQuery.value;
   page = 1;
@@ -32,6 +33,7 @@ async function handlerSubmit(evt) {
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
+
       form.elements.searchQuery.value = '';
       return;
     }
