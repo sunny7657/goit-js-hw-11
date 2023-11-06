@@ -52,7 +52,9 @@
   color: rgb(84, 81, 81);
 }
 
-.load-more {
+.load-more-contener {
+  display: flex;
+  justify-content: center;
   height: 30px;
   margin-top: 20px;
 }
