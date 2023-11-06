@@ -24,6 +24,7 @@ async function handlerSubmit(evt) {
   btnLoadMore.classList.add('hidden');
 
   const searchTerm = form.elements.searchQuery.value;
+  if (searchTerm === '') return alert('Please, enter something!');
   page = 1;
   try {
     const data = await fetchImages(searchTerm, page);
@@ -33,13 +34,16 @@ async function handlerSubmit(evt) {
       Notify.failure(
         'Sorry, there are no images matching your search query. Please try again.'
       );
-
       form.elements.searchQuery.value = '';
       return;
     }
 
     createMarkup(images);
     galleryLightBox.refresh();
+    if (data.totalHits < 40) {
+      btnLoadMore.classList.add('hidden');
+      return;
+    }
     btnLoadMore.classList.remove('hidden');
   } catch (error) {
     console.log(error.message);
@@ -53,8 +57,7 @@ async function handlerLoadMore(evt) {
   try {
     const data = await fetchImages(searchTerm, page);
     const images = data.hits;
-    const hits = data.hits.length;
-    const lastPage = Math.ceil(data.totalHits / hits);
+    const lastPage = Math.ceil(data.totalHits / 40);
 
     createMarkup(images);
     galleryLightBox.refresh();
